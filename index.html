@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIBECLUB AI JUDGE</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header - Fight Club Style -->
+        <header class="header">
+            <p class="header-subtitle">FIRST RULE OF VIBECLUB</p>
+            <h1>
+                <span>BUILD IT</span>
+                <span>SHIP IT</span>
+            </h1>
+            <a href="#form" class="btn-hero">SUBMIT PROJECT</a>
+        </header>
+
+        <!-- Main Form -->
+        <main class="main-content">
+            <form id="submissionForm" class="submission-form">
+                
+                <!-- Project Details -->
+                <div class="form-section" id="form">
+                    <h2>PROJECT DETAILS</h2>
+                    
+                    <div class="form-group">
+                        <label for="projectTitle">
+                            Project Title <span class="required">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="projectTitle" 
+                            name="projectTitle" 
+                            placeholder="What's it called?"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="coreIdea">
+                            Core Idea <span class="required">*</span>
+                            <span class="char-limit">150 chars</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="coreIdea" 
+                            name="coreIdea" 
+                            placeholder="Pitch it in one sentence"
+                            maxlength="150"
+                            required
+                        >
+                        <div class="char-counter">
+                            <span id="coreIdeaCounter">0</span>/150
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="targetAudience">
+                            Target Audience <span class="required">*</span>
+                            <span class="char-limit">200 chars</span>
+                        </label>
+                        <textarea 
+                            id="targetAudience" 
+                            name="targetAudience" 
+                            placeholder="Who are you building for?"
+                            maxlength="200"
+                            rows="2"
+                            required
+                        ></textarea>
+                        <div class="char-counter">
+                            <span id="targetAudienceCounter">0</span>/200
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="problemStatement">
+                            Problem Statement <span class="required">*</span>
+                            <span class="char-limit">300 chars</span>
+                        </label>
+                        <textarea 
+                            id="problemStatement" 
+                            name="problemStatement" 
+                            placeholder="What pain are you solving?"
+                            maxlength="300"
+                            rows="3"
+                            required
+                        ></textarea>
+                        <div class="char-counter">
+                            <span id="problemStatementCounter">0</span>/300
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Business Model -->
+                <div class="form-section">
+                    <h2>BUSINESS MODEL</h2>
+                    
+                    <div class="form-group">
+                        <label for="businessModel">
+                            How Will You Make Money? <span class="required">*</span>
+                        </label>
+                        <textarea 
+                            id="businessModel" 
+                            name="businessModel" 
+                            placeholder="SaaS, Freemium, Marketplace..."
+                            rows="2"
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="competitiveAdvantage">
+                            Why Will You Win? <span class="required">*</span>
+                            <span class="char-limit">300 chars</span>
+                        </label>
+                        <textarea 
+                            id="competitiveAdvantage" 
+                            name="competitiveAdvantage" 
+                            placeholder="What makes you different?"
+                            maxlength="300"
+                            rows="3"
+                            required
+                        ></textarea>
+                        <div class="char-counter">
+                            <span id="competitiveAdvantageCounter">0</span>/300
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="marketSize">
+                            Market Size (Optional)
+                        </label>
+                        <input 
+                            type="text" 
+                            id="marketSize" 
+                            name="marketSize" 
+                            placeholder="$5B TAM, $500M SAM..."
+                        >
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div class="form-section">
+                    <h2>PROOF OF WORK</h2>
+                    
+                    <div class="form-group">
+                        <label for="githubLink">
+                            GitHub Repository
+                        </label>
+                        <input 
+                            type="url" 
+                            id="githubLink" 
+                            name="githubLink" 
+                            placeholder="https://github.com/..."
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="demoVideoLink">
+                            Demo Video
+                        </label>
+                        <input 
+                            type="url" 
+                            id="demoVideoLink" 
+                            name="demoVideoLink" 
+                            placeholder="https://youtube.com/..."
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="teamExperience">
+                            Team Experience
+                        </label>
+                        <textarea 
+                            id="teamExperience" 
+                            name="teamExperience" 
+                            placeholder="Who's building this?"
+                            rows="3"
+                        ></textarea>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        GET JUDGED
+                    </button>
+                    <p class="form-note">AI evaluation takes ~20 seconds</p>
+                </div>
+            </form>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="loading-state hidden">
+                <div class="loading-spinner"></div>
+                <h3>ANALYZING YOUR PROJECT</h3>
+                <div class="loading-steps">
+                    <div class="step" id="step1">
+                        <span class="step-icon">○</span>
+                        <span class="step-text">Validating Submission</span>
+                    </div>
+                    <div class="step" id="step2">
+                        <span class="step-icon">○</span>
+                        <span class="step-text">Researching Market</span>
+                    </div>
+                    <div class="step" id="step3">
+                        <span class="step-icon">○</span>
+                        <span class="step-text">Finding Competitors</span>
+                    </div>
+                    <div class="step" id="step4">
+                        <span class="step-icon">○</span>
+                        <span class="step-text">Scoring Innovation</span>
+                    </div>
+                    <div class="step" id="step5">
+                        <span class="step-icon">○</span>
+                        <span class="step-text">Generating Verdict</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Display -->
+            <div id="resultsContainer" class="results-container hidden">
+                <!-- Results will be dynamically inserted here -->
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Powered by Claude AI — Built for Builders</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+# Copy this file to .env and fill in your API keys
+
+# REQUIRED: Anthropic Claude API Key
+# Get your API key from: https://console.anthropic.com/
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+
+# OPTIONAL: Web Search API Key (for market research)
+# Choose one provider and get an API key:
+# - Brave Search: https://brave.com/search/api/
+# - Serper: https://serper.dev/
+# - Tavily: https://tavily.com/
+SEARCH_API_KEY=your_search_api_key_here
+SEARCH_API_PROVIDER=brave
+
+# Server Configuration
+PORT=3000
+
+# NOTE: If you don't provide a search API key, the system will work
+# with mock search data for demonstrations.
+
