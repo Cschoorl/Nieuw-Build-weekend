@@ -8,230 +8,261 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header - Fight Club Style -->
+        <!-- Header -->
         <header class="header">
             <p class="header-subtitle">FIRST RULE OF VIBECLUB</p>
             <h1>
                 <span>BUILD IT</span>
                 <span>SHIP IT</span>
             </h1>
-            <a href="#form" class="btn-hero">SUBMIT PROJECT</a>
+            <p class="header-desc">The AI Agent finds competitors, market data and gives you an honest score</p>
+            <div class="hero-buttons">
+                <a href="interview.html" class="btn-hero btn-speech">
+                    <svg class="btn-mic-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="8" y="2" width="8" height="13" rx="4" />
+                        <path d="M5 11v1a7 7 0 0 0 14 0v-1" />
+                        <line x1="12" y1="19" x2="12" y2="22" />
+                        <line x1="8" y1="22" x2="16" y2="22" />
+                    </svg>
+                    VOICE INTERVIEW
+                </a>
+                <a href="#form" class="btn-hero btn-type">OR TYPE BELOW</a>
+            </div>
         </header>
 
         <!-- Main Form -->
         <main class="main-content">
             <form id="submissionForm" class="submission-form">
                 
-                <!-- Project Details -->
                 <div class="form-section" id="form">
-                    <h2>PROJECT DETAILS</h2>
+                    <h2>YOUR PROJECT</h2>
+                    <p class="form-intro">🎤 Click the microphone to speak your answer</p>
                     
                     <div class="form-group">
                         <label for="projectTitle">
-                            Project Title <span class="required">*</span>
+                            Project Name <span class="required">*</span>
                         </label>
-                        <input 
-                            type="text" 
-                            id="projectTitle" 
-                            name="projectTitle" 
-                            placeholder="What's it called?"
-                            required
-                        >
+                        <div class="input-with-speech">
+                            <input 
+                                type="text" 
+                                id="projectTitle" 
+                                name="projectTitle" 
+                                placeholder="The name of your product/startup"
+                                required
+                            >
+                            <button type="button" class="speech-btn" data-field="projectTitle" title="Click to speak">
+                                <svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="13" rx="4"/><path d="M5 11v1a7 7 0 0 0 14 0v-1"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label for="coreIdea">
-                            Core Idea <span class="required">*</span>
-                            <span class="char-limit">150 chars</span>
+                            What are you building? <span class="required">*</span>
                         </label>
-                        <input 
-                            type="text" 
-                            id="coreIdea" 
-                            name="coreIdea" 
-                            placeholder="Pitch it in one sentence"
-                            maxlength="150"
-                            required
-                        >
-                        <div class="char-counter">
-                            <span id="coreIdeaCounter">0</span>/150
+                        <div class="input-with-speech">
+                            <textarea 
+                                id="coreIdea" 
+                                name="coreIdea" 
+                                placeholder="Describe what you're building in 2-3 sentences. Be specific about features and functionality."
+                                rows="3"
+                                required
+                            ></textarea>
+                            <button type="button" class="speech-btn" data-field="coreIdea" title="Click to speak">
+                                <svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="13" rx="4"/><path d="M5 11v1a7 7 0 0 0 14 0v-1"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="problemSolved">
+                            What problem do you solve? <span class="required">*</span>
+                        </label>
+                        <div class="input-with-speech">
+                            <textarea 
+                                id="problemSolved" 
+                                name="problemSolved" 
+                                placeholder="What specific pain point does your target audience have? Why is this a real problem?"
+                                rows="3"
+                                required
+                            ></textarea>
+                            <button type="button" class="speech-btn" data-field="problemSolved" title="Click to speak">
+                                <svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="13" rx="4"/><path d="M5 11v1a7 7 0 0 0 14 0v-1"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
+                            </button>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="targetAudience">
                             Target Audience <span class="required">*</span>
-                            <span class="char-limit">200 chars</span>
                         </label>
-                        <textarea 
-                            id="targetAudience" 
-                            name="targetAudience" 
-                            placeholder="Who are you building for?"
-                            maxlength="200"
-                            rows="2"
-                            required
-                        ></textarea>
-                        <div class="char-counter">
-                            <span id="targetAudienceCounter">0</span>/200
+                        <div class="input-with-speech">
+                            <input 
+                                type="text" 
+                                id="targetAudience" 
+                                name="targetAudience" 
+                                placeholder="Who will use this? E.g. 'Software developers at scale-ups'"
+                                required
+                            >
+                            <button type="button" class="speech-btn" data-field="targetAudience" title="Click to speak">
+                                <svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="13" rx="4"/><path d="M5 11v1a7 7 0 0 0 14 0v-1"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
+                            </button>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="problemStatement">
-                            Problem Statement <span class="required">*</span>
-                            <span class="char-limit">300 chars</span>
+                        <label for="uniqueApproach">
+                            What makes your approach unique? <span class="required">*</span>
                         </label>
-                        <textarea 
-                            id="problemStatement" 
-                            name="problemStatement" 
-                            placeholder="What pain are you solving?"
-                            maxlength="300"
-                            rows="3"
-                            required
-                        ></textarea>
-                        <div class="char-counter">
-                            <span id="problemStatementCounter">0</span>/300
+                        <div class="input-with-speech">
+                            <textarea 
+                                id="uniqueApproach" 
+                                name="uniqueApproach" 
+                                placeholder="How is your approach different from existing solutions? What's your secret sauce?"
+                                rows="3"
+                                required
+                            ></textarea>
+                            <button type="button" class="speech-btn" data-field="uniqueApproach" title="Click to speak">
+                                <svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="13" rx="4"/><path d="M5 11v1a7 7 0 0 0 14 0v-1"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Business Model -->
                 <div class="form-section">
-                    <h2>BUSINESS MODEL</h2>
+                    <h2>BUSINESS</h2>
                     
                     <div class="form-group">
                         <label for="businessModel">
-                            How Will You Make Money? <span class="required">*</span>
+                            Business Model <span class="optional">(optional)</span>
                         </label>
-                        <textarea 
-                            id="businessModel" 
-                            name="businessModel" 
-                            placeholder="SaaS, Freemium, Marketplace..."
-                            rows="2"
-                            required
-                        ></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="competitiveAdvantage">
-                            Why Will You Win? <span class="required">*</span>
-                            <span class="char-limit">300 chars</span>
-                        </label>
-                        <textarea 
-                            id="competitiveAdvantage" 
-                            name="competitiveAdvantage" 
-                            placeholder="What makes you different?"
-                            maxlength="300"
-                            rows="3"
-                            required
-                        ></textarea>
-                        <div class="char-counter">
-                            <span id="competitiveAdvantageCounter">0</span>/300
+                        <div class="input-with-speech">
+                            <input 
+                                type="text" 
+                                id="businessModel" 
+                                name="businessModel" 
+                                placeholder="How do you make money? E.g. '$29/month SaaS' or 'Freemium + Pro tier'"
+                            >
+                            <button type="button" class="speech-btn" data-field="businessModel" title="Click to speak">
+                                <svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="13" rx="4"/><path d="M5 11v1a7 7 0 0 0 14 0v-1"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
+                            </button>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="marketSize">
-                            Market Size (Optional)
+                        <label for="techStack">
+                            Tech Stack <span class="optional">(optional)</span>
+                        </label>
+                        <div class="input-with-speech">
+                            <input 
+                                type="text" 
+                                id="techStack" 
+                                name="techStack" 
+                                placeholder="What technologies do you use? E.g. 'Next.js, OpenAI API, Supabase'"
+                            >
+                            <button type="button" class="speech-btn" data-field="techStack" title="Click to speak">
+                                <svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="13" rx="4"/><path d="M5 11v1a7 7 0 0 0 14 0v-1"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="demoUrl">
+                            Demo/Website URL <span class="optional">(optional)</span>
                         </label>
                         <input 
-                            type="text" 
-                            id="marketSize" 
-                            name="marketSize" 
-                            placeholder="$5B TAM, $500M SAM..."
+                            type="url" 
+                            id="demoUrl" 
+                            name="demoUrl" 
+                            placeholder="https://..."
                         >
                     </div>
                 </div>
 
-                <!-- Links -->
-                <div class="form-section">
-                    <h2>PROOF OF WORK</h2>
-                    
-                    <div class="form-group">
-                        <label for="githubLink">
-                            GitHub Repository
-                        </label>
-                        <input 
-                            type="url" 
-                            id="githubLink" 
-                            name="githubLink" 
-                            placeholder="https://github.com/..."
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="demoVideoLink">
-                            Demo Video
-                        </label>
-                        <input 
-                            type="url" 
-                            id="demoVideoLink" 
-                            name="demoVideoLink" 
-                            placeholder="https://youtube.com/..."
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="teamExperience">
-                            Team Experience
-                        </label>
-                        <textarea 
-                            id="teamExperience" 
-                            name="teamExperience" 
-                            placeholder="Who's building this?"
-                            rows="3"
-                        ></textarea>
-                    </div>
-                </div>
-
-                <!-- Submit Button -->
+                <!-- Submit -->
                 <div class="form-actions">
                     <button type="submit" class="btn-submit" id="submitBtn">
-                        GET JUDGED
+                        START AI ANALYSIS
                     </button>
-                    <p class="form-note">AI evaluation takes ~20 seconds</p>
+                    <p class="form-note">The more context you provide, the better the analysis</p>
                 </div>
             </form>
 
             <!-- Loading State -->
             <div id="loadingState" class="loading-state hidden">
-                <div class="loading-spinner"></div>
-                <h3>ANALYZING YOUR PROJECT</h3>
-                <div class="loading-steps">
-                    <div class="step" id="step1">
-                        <span class="step-icon">○</span>
-                        <span class="step-text">Validating Submission</span>
+                <div class="agent-header">
+                    <h3>AI AGENT WORKING</h3>
+                    <p class="agent-subtitle">Please wait while we analyze your project thoroughly</p>
+                </div>
+                
+                <div class="agent-steps">
+                    <div class="agent-step" id="step1">
+                        <div class="step-status">
+                            <span class="step-spinner"></span>
+                        </div>
+                        <div class="step-info">
+                            <div class="step-title">Searching the web...</div>
+                            <div class="step-detail" id="step1-detail">Looking for existing products</div>
+                        </div>
                     </div>
-                    <div class="step" id="step2">
-                        <span class="step-icon">○</span>
-                        <span class="step-text">Researching Market</span>
+                    
+                    <div class="agent-step" id="step2">
+                        <div class="step-status pending">
+                            <span class="step-dot"></span>
+                        </div>
+                        <div class="step-info">
+                            <div class="step-title">Analyzing competitors</div>
+                            <div class="step-detail" id="step2-detail">Waiting...</div>
+                        </div>
                     </div>
-                    <div class="step" id="step3">
-                        <span class="step-icon">○</span>
-                        <span class="step-text">Finding Competitors</span>
+                    
+                    <div class="agent-step" id="step3">
+                        <div class="step-status pending">
+                            <span class="step-dot"></span>
+                        </div>
+                        <div class="step-info">
+                            <div class="step-title">Researching market</div>
+                            <div class="step-detail" id="step3-detail">Waiting...</div>
+                        </div>
                     </div>
-                    <div class="step" id="step4">
-                        <span class="step-icon">○</span>
-                        <span class="step-text">Scoring Innovation</span>
+                    
+                    <div class="agent-step" id="step4">
+                        <div class="step-status pending">
+                            <span class="step-dot"></span>
+                        </div>
+                        <div class="step-info">
+                            <div class="step-title">GPT-4 deep analysis</div>
+                            <div class="step-detail" id="step4-detail">Waiting...</div>
+                        </div>
                     </div>
-                    <div class="step" id="step5">
-                        <span class="step-icon">○</span>
-                        <span class="step-text">Generating Verdict</span>
+                    
+                    <div class="agent-step" id="step5">
+                        <div class="step-status pending">
+                            <span class="step-dot"></span>
+                        </div>
+                        <div class="step-info">
+                            <div class="step-title">Calculating scores</div>
+                            <div class="step-detail" id="step5-detail">Waiting...</div>
+                        </div>
                     </div>
+                </div>
+                
+                <div class="agent-log" id="agentLog">
+                    <div class="log-line">Agent started...</div>
                 </div>
             </div>
 
-            <!-- Results Display -->
-            <div id="resultsContainer" class="results-container hidden">
-                <!-- Results will be dynamically inserted here -->
-            </div>
+            <!-- Results -->
+            <div id="resultsContainer" class="results-container hidden"></div>
         </main>
 
         <!-- Footer -->
         <footer class="footer">
-            <p>Powered by Claude AI — Built for Builders</p>
+            <p>Powered by GPT-4o + ElevenLabs + Web Search — Built for Builders</p>
         </footer>
     </div>
 
+    <script src="speech.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

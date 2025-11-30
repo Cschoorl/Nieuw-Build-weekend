@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOICE PITCH | VIBECLUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        /* Progress */
+        .progress {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 60px;
+        }
+
+        .progress-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #333;
+            transition: all 0.3s;
+        }
+
+        .progress-dot.done {
+            background: #22C55E;
+        }
+
+        .progress-dot.active {
+            background: #E63B2E;
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        /* Question */
+        .question {
+            margin-bottom: 50px;
+        }
+
+        .question-number {
+            font-size: 13px;
+            letter-spacing: 3px;
+            color: #E63B2E;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-family: 'Anton', sans-serif;
+            font-size: clamp(32px, 7vw, 52px);
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+
+        /* Big Mic Button */
+        .mic-btn {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: none;
+            background: #1a1a1a;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .mic-btn:hover {
+            background: #222;
+            transform: scale(1.05);
+        }
+
+        .mic-btn.recording {
+            background: #E63B2E;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(230, 59, 46, 0.4); }
+            50% { box-shadow: 0 0 0 30px rgba(230, 59, 46, 0); }
+        }
+
+        .mic-icon {
+            width: 50px;
+            height: 50px;
+        }
+
+        .mic-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: #fff;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .mic-btn.recording .mic-icon svg {
+            stroke: #fff;
+        }
+
+        .mic-label {
+            font-size: 14px;
+            color: #666;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+        }
+
+        .mic-btn.recording + .mic-label {
+            color: #E63B2E;
+        }
+
+        /* Answer Box */
+        .answer-box {
+            background: #111;
+            border-radius: 16px;
+            padding: 25px;
+            min-height: 80px;
+            margin-bottom: 40px;
+            border: 2px solid #222;
+            transition: all 0.3s;
+        }
+
+        .answer-box.recording {
+            border-color: #E63B2E;
+        }
+
+        .answer-box.done {
+            border-color: #22C55E;
+        }
+
+        .answer-text {
+            font-size: 18px;
+            line-height: 1.5;
+            color: #fff;
+        }
+
+        .answer-placeholder {
+            color: #444;
+        }
+
+        /* Next Button */
+        .next-btn {
+            padding: 18px 60px;
+            background: #E63B2E;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Space Grotesk', sans-serif;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .next-btn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .next-btn:hover {
+            background: #ff6b5b;
+            transform: scale(1.05);
+        }
+
+        /* Start Screen */
+        .start-screen {
+            text-align: center;
+        }
+
+        .start-title {
+            font-family: 'Anton', sans-serif;
+            font-size: clamp(48px, 12vw, 80px);
+            color: #E63B2E;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .start-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 50px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .start-btn {
+            padding: 22px 70px;
+            background: #E63B2E;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .start-btn:hover {
+            background: #ff6b5b;
+            transform: scale(1.05);
+        }
+
+        /* Done Screen */
+        .done-screen {
+            text-align: center;
+        }
+
+        .done-icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+        }
+
+        .done-title {
+            font-family: 'Anton', sans-serif;
+            font-size: 48px;
+            color: #22C55E;
+            margin-bottom: 15px;
+        }
+
+        .done-subtitle {
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .done-btn {
+            padding: 22px 70px;
+            background: #22C55E;
+            color: #000;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .done-btn:hover {
+            background: #4ade80;
+            transform: scale(1.05);
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- START -->
+        <div id="startScreen" class="start-screen">
+            <h1 class="start-title">VOICE PITCH</h1>
+            <p class="start-subtitle">
+                Answer 5 questions about your idea using your voice. Just tap the mic and talk.
+            </p>
+            <button class="start-btn" id="startBtn">START →</button>
+        </div>
+
+        <!-- INTERVIEW -->
+        <div id="interviewScreen" class="hidden">
+            <div class="progress" id="progress"></div>
+            
+            <div class="question">
+                <div class="question-number" id="qNum">1 / 5</div>
+                <h1 class="question-text" id="qText">What's your project called?</h1>
+            </div>
+
+            <button class="mic-btn" id="micBtn">
+                <span class="mic-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="8" y="2" width="8" height="13" rx="4" />
+                        <path d="M5 11v1a7 7 0 0 0 14 0v-1" />
+                        <line x1="12" y1="19" x2="12" y2="22" />
+                        <line x1="8" y1="22" x2="16" y2="22" />
+                    </svg>
+                </span>
+            </button>
+            <div class="mic-label" id="micLabel">TAP TO SPEAK</div>
+
+            <div class="answer-box" id="answerBox">
+                <div class="answer-text" id="answerText">
+                    <span class="answer-placeholder">Your answer will appear here...</span>
+                </div>
+            </div>
+
+            <button class="next-btn" id="nextBtn">NEXT →</button>
+        </div>
+
+        <!-- DONE -->
+        <div id="doneScreen" class="done-screen hidden">
+            <div class="done-icon">✓</div>
+            <h1 class="done-title">DONE!</h1>
+            <p class="done-subtitle">Ready to analyze your pitch</p>
+            <button class="done-btn" id="doneBtn">ANALYZE →</button>
+        </div>
+
+    </div>
+
+    <script>
+        // API key is now stored securely on the server
+
+        const questions = [
+            { id: 'projectTitle', text: "What's your project called?" },
+            { id: 'coreIdea', text: "What are you building?" },
+            { id: 'problemSolved', text: "What problem do you solve?" },
+            { id: 'targetAudience', text: "Who is this for?" },
+            { id: 'uniqueApproach', text: "What makes you different?" }
+        ];
+
+        let current = 0;
+        let answers = {};
+        let recording = false;
+        let recorder = null;
+        let chunks = [];
+
+        // DOM
+        const startScreen = document.getElementById('startScreen');
+        const interviewScreen = document.getElementById('interviewScreen');
+        const doneScreen = document.getElementById('doneScreen');
+        const startBtn = document.getElementById('startBtn');
+        const progress = document.getElementById('progress');
+        const qNum = document.getElementById('qNum');
+        const qText = document.getElementById('qText');
+        const micBtn = document.getElementById('micBtn');
+        const micLabel = document.getElementById('micLabel');
+        const answerBox = document.getElementById('answerBox');
+        const answerText = document.getElementById('answerText');
+        const nextBtn = document.getElementById('nextBtn');
+        const doneBtn = document.getElementById('doneBtn');
+
+        // Build progress dots
+        questions.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = 'progress-dot';
+            dot.dataset.i = i;
+            progress.appendChild(dot);
+        });
+
+        // Start
+        startBtn.onclick = () => {
+            startScreen.classList.add('hidden');
+            interviewScreen.classList.remove('hidden');
+            showQuestion();
+        };
+
+        // Show question
+        function showQuestion() {
+            const q = questions[current];
+            qNum.textContent = `${current + 1} / ${questions.length}`;
+            qText.textContent = q.text;
+            answerText.innerHTML = '<span class="answer-placeholder">Your answer will appear here...</span>';
+            answerBox.className = 'answer-box';
+            nextBtn.className = 'next-btn';
+            nextBtn.textContent = current === questions.length - 1 ? 'FINISH →' : 'NEXT →';
+
+            // Update dots
+            document.querySelectorAll('.progress-dot').forEach((dot, i) => {
+                dot.className = 'progress-dot';
+                if (i < current) dot.classList.add('done');
+                if (i === current) dot.classList.add('active');
+            });
+        }
+
+        // Mic button
+        micBtn.onclick = async () => {
+            if (recording) {
+                stopRecording();
+            } else {
+                await startRecording();
+            }
+        };
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                chunks = [];
+                recorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+                
+                recorder.ondataavailable = e => {
+                    if (e.data.size > 0) chunks.push(e.data);
+                };
+                
+                recorder.onstop = async () => {
+                    stream.getTracks().forEach(t => t.stop());
+                    if (chunks.length) {
+                        await transcribe(new Blob(chunks, { type: 'audio/webm' }));
+                    }
+                };
+
+                recorder.start();
+                recording = true;
+                micBtn.classList.add('recording');
+                micLabel.textContent = 'TAP TO STOP';
+                answerBox.classList.add('recording');
+                answerText.innerHTML = '<span class="answer-placeholder">Listening...</span>';
+
+            } catch (e) {
+                alert('Please allow microphone access');
+            }
+        }
+
+        function stopRecording() {
+            if (recorder && recorder.state !== 'inactive') {
+                recorder.stop();
+            }
+            recording = false;
+            micBtn.classList.remove('recording');
+            micLabel.textContent = 'TAP TO SPEAK';
+            answerBox.classList.remove('recording');
+            answerText.innerHTML = '<span class="answer-placeholder">Processing...</span>';
+        }
+
+        async function transcribe(blob) {
+            try {
+                const wav = await toWav(blob);
+                const form = new FormData();
+                form.append('file', wav, 'audio.wav');
+                form.append('model_id', 'scribe_v1');
+
+                // Use proxy endpoint on production, direct API on localhost
+                const isLocalhost = window.location.hostname === 'localhost';
+                const apiUrl = isLocalhost 
+                    ? 'https://api.elevenlabs.io/v1/speech-to-text'
+                    : '/api/transcribe';
+                
+                const headers = isLocalhost 
+                    ? { 'xi-api-key': 'sk_4ae10a6d90856b512fdcc1154a2fc840707bcd2a5225ea93' }
+                    : {};
+                
+                const res = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: headers,
+                    body: form
+                });
+
+                const data = await res.json();
+                const text = data?.text?.trim();
+
+                if (text) {
+                    answerText.textContent = text;
+                    answerBox.classList.add('done');
+                    nextBtn.classList.add('visible');
+                    answers[questions[current].id] = text;
+                } else {
+                    answerText.innerHTML = '<span class="answer-placeholder">No speech detected. Try again.</span>';
+                }
+            } catch (e) {
+                answerText.innerHTML = '<span class="answer-placeholder">Error. Try again.</span>';
+            }
+        }
+
+        async function toWav(blob) {
+            const buf = await blob.arrayBuffer();
+            const ctx = new AudioContext();
+            const audio = await ctx.decodeAudioData(buf);
+            const ch = audio.numberOfChannels;
+            const rate = audio.sampleRate;
+            const len = audio.length;
+            const wav = new ArrayBuffer(44 + len * ch * 2);
+            const v = new DataView(wav);
+            const w = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+            let o = 0;
+            w(o, 'RIFF'); o += 4;
+            v.setUint32(o, 36 + len * ch * 2, true); o += 4;
+            w(o, 'WAVE'); o += 4;
+            w(o, 'fmt '); o += 4;
+            v.setUint32(o, 16, true); o += 4;
+            v.setUint16(o, 1, true); o += 2;
+            v.setUint16(o, ch, true); o += 2;
+            v.setUint32(o, rate, true); o += 4;
+            v.setUint32(o, rate * ch * 2, true); o += 4;
+            v.setUint16(o, ch * 2, true); o += 2;
+            v.setUint16(o, 16, true); o += 2;
+            w(o, 'data'); o += 4;
+            v.setUint32(o, len * ch * 2, true); o += 4;
+            for (let i = 0; i < len; i++) {
+                for (let c = 0; c < ch; c++) {
+                    const s = audio.getChannelData(c)[i];
+                    v.setInt16(o, Math.max(-1, Math.min(1, s)) * (s < 0 ? 0x8000 : 0x7FFF), true);
+                    o += 2;
+                }
+            }
+            ctx.close();
+            return new Blob([wav], { type: 'audio/wav' });
+        }
+
+        // Next
+        nextBtn.onclick = () => {
+            if (current < questions.length - 1) {
+                current++;
+                showQuestion();
+            } else {
+                interviewScreen.classList.add('hidden');
+                doneScreen.classList.remove('hidden');
+            }
+        };
+
+        // Done
+        doneBtn.onclick = () => {
+            localStorage.setItem('speechAnswers', JSON.stringify(answers));
+            window.location.href = 'index.html?fromSpeech=true';
+        };
+    </script>
+</body>
+</html>
