@@ -441,3 +441,4 @@ Built with ❤️ for VibeClub Hackathon
 **Powered by**: Claude Sonnet 4 + Web Research APIs
 
 
+
