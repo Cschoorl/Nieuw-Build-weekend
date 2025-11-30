@@ -490,6 +490,111 @@ textarea::placeholder {
 }
 
 /* ============================================
+   AI THINKING SECTION
+   ============================================ */
+.thinking-section {
+    padding: 50px 40px;
+    border-bottom: 1px solid var(--gray-dark);
+    background: linear-gradient(180deg, rgba(99, 102, 241, 0.1) 0%, transparent 100%);
+}
+
+.thinking-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.thinking-card {
+    background: var(--gray-darker);
+    border-radius: 12px;
+    padding: 25px;
+    border-left: 3px solid var(--red);
+}
+
+.thinking-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--red);
+    margin-bottom: 12px;
+}
+
+.thinking-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--white);
+}
+
+/* ============================================
+   CONCERNS SECTION
+   ============================================ */
+.concerns-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.concern-row {
+    display: flex;
+    gap: 15px;
+    padding: 20px;
+    background: rgba(230, 59, 46, 0.1);
+    border-radius: 10px;
+    border-left: 3px solid var(--red);
+}
+
+.concern-icon {
+    color: var(--red);
+    font-size: 20px;
+    font-weight: 700;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--red);
+    color: var(--black);
+    border-radius: 50%;
+}
+
+.concern-content {
+    flex: 1;
+}
+
+.concern-issue {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 8px;
+    color: var(--white);
+}
+
+.concern-suggestion {
+    font-size: 14px;
+    color: var(--gray-light);
+}
+
+/* ============================================
+   RESEARCH SOURCE
+   ============================================ */
+.research-source {
+    font-size: 11px;
+    color: var(--gray);
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background: var(--gray-darker);
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.investor-why {
+    margin-top: 15px;
+    font-size: 14px;
+    color: var(--gray-light);
+    font-style: italic;
+}
+
+/* ============================================
    RESULT SECTIONS
    ============================================ */
 .result-section {
@@ -810,6 +915,10 @@ textarea::placeholder {
     
     .results-column {
         border-right: none;
+    }
+    
+    .thinking-grid {
+        grid-template-columns: 1fr;
     }
 }
 

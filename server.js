@@ -3,30 +3,37 @@ const cors = require('cors');
 const path = require('path');
 const { evaluateProject } = require('./aiJudge');
 
+// Load environment variables from .env file
+require('dotenv').config();
+
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Check for API key on startup
+const hasOpenAI = process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.startsWith('sk-');
+
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname))); // Serve static files
+app.use(express.static(path.join(__dirname)));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
     res.json({ 
         status: 'healthy', 
         message: 'VibeClub AI Judge is running!',
-        mode: 'Smart Analysis Engine'
+        mode: hasOpenAI ? 'OpenAI GPT-4' : 'Local Analysis',
+        apiConfigured: hasOpenAI
     });
 });
 
 // Main evaluation endpoint
 app.post('/api/evaluate', async (req, res) => {
     try {
-        console.log('\n' + '='.repeat(60));
+        console.log('\n' + '═'.repeat(60));
         console.log('📥 NEW SUBMISSION:', req.body.projectTitle);
-        console.log('='.repeat(60));
+        console.log('═'.repeat(60));
         
         // Validate request body
         const requiredFields = [
@@ -50,60 +57,33 @@ app.post('/api/evaluate', async (req, res) => {
         }
         
         // Validate character limits
-        if (req.body.coreIdea.length > 150) {
-            return res.status(400).json({
-                error: 'Core idea exceeds 150 characters',
-                message: 'Please shorten your core idea description'
-            });
-        }
+        const limits = {
+            coreIdea: 150,
+            targetAudience: 200,
+            problemStatement: 300,
+            competitiveAdvantage: 300
+        };
         
-        if (req.body.targetAudience.length > 200) {
-            return res.status(400).json({
-                error: 'Target audience exceeds 200 characters',
-                message: 'Please shorten your target audience description'
-            });
-        }
-        
-        if (req.body.problemStatement.length > 300) {
-            return res.status(400).json({
-                error: 'Problem statement exceeds 300 characters',
-                message: 'Please shorten your problem statement'
-            });
-        }
-        
-        if (req.body.competitiveAdvantage.length > 300) {
-            return res.status(400).json({
-                error: 'Competitive advantage exceeds 300 characters',
-                message: 'Please shorten your competitive advantage'
-            });
-        }
-        
-        // Validate URLs if provided
-        if (req.body.githubLink && !isValidUrl(req.body.githubLink)) {
-            return res.status(400).json({
-                error: 'Invalid GitHub URL',
-                message: 'Please enter a valid URL for GitHub'
-            });
-        }
-        
-        if (req.body.demoVideoLink && !isValidUrl(req.body.demoVideoLink)) {
-            return res.status(400).json({
-                error: 'Invalid demo video URL',
-                message: 'Please enter a valid URL for demo video'
-            });
+        for (const [field, limit] of Object.entries(limits)) {
+            if (req.body[field] && req.body[field].length > limit) {
+                return res.status(400).json({
+                    error: `${field} exceeds ${limit} characters`,
+                    message: `Please shorten your ${field}`
+                });
+            }
         }
         
         // Evaluate the project
-        console.log('🤖 Starting AI evaluation...');
+        console.log(`🤖 Starting evaluation (Mode: ${hasOpenAI ? 'OpenAI GPT-4' : 'Local'})...`);
         const startTime = Date.now();
         
         const result = await evaluateProject(req.body);
         
         const duration = ((Date.now() - startTime) / 1000).toFixed(1);
-        console.log(`✅ Evaluation complete in ${duration}s`);
-        console.log(`📊 Scores: Innovation ${result.innovationScore.score}, Market ${result.marketPotentialScore.score}`);
-        console.log(`🏆 Verdict: ${result.overallRating.verdict}`);
-        console.log('='.repeat(60) + '\n');
+        console.log(`\n✅ Evaluation complete in ${duration}s`);
+        console.log(`📊 Innovation: ${result.innovationScore.score} | Market: ${result.marketPotentialScore.score}`);
+        console.log(`🏆 Verdict: ${result.overallRating.verdict} | Investor: ${result.overallRating.investorSignal}`);
+        console.log('═'.repeat(60) + '\n');
         
         res.json(result);
         
@@ -133,30 +113,25 @@ app.use((err, req, res, next) => {
 // Start server
 app.listen(PORT, () => {
     console.log(`
-╔════════════════════════════════════════════════════════════╗
-║                                                            ║
-║   🎯 VibeClub AI Judge System                             ║
-║                                                            ║
-║   Server running on: http://localhost:${PORT}                ║
-║   Frontend: http://localhost:${PORT}                         ║
-║   API: http://localhost:${PORT}/api                          ║
-║                                                            ║
-║   Mode: Smart Analysis Engine (No API Keys Required!)      ║
-║                                                            ║
-║   Status: ✅ Ready to evaluate projects!                   ║
-║                                                            ║
-╚════════════════════════════════════════════════════════════╝
+╔════════════════════════════════════════════════════════════════╗
+║                                                                ║
+║   🎯 VibeClub AI Judge System                                 ║
+║                                                                ║
+║   Server: http://localhost:${PORT}                               ║
+║                                                                ║
+║   Mode: ${hasOpenAI ? '🟢 OpenAI GPT-4 (Real AI Analysis)' : '🟡 Local Analysis (Add API key for AI)'}       
+║                                                                ║
+${!hasOpenAI ? `║   ⚠️  Add OPENAI_API_KEY to .env for GPT-4 analysis          ║
+║                                                                ║` : ''}
+║   Status: ✅ Ready to evaluate projects!                       ║
+║                                                                ║
+╚════════════════════════════════════════════════════════════════╝
     `);
-});
-
-// Helper function to validate URLs
-function isValidUrl(string) {
-    try {
-        new URL(string);
-        return true;
-    } catch (_) {
-        return false;
+    
+    if (!hasOpenAI) {
+        console.log('\n💡 TIP: Create a .env file with your OpenAI API key:');
+        console.log('   OPENAI_API_KEY=sk-your-key-here\n');
     }
-}
+});
 
 module.exports = app;

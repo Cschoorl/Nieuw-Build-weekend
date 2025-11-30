@@ -1,20 +1,58 @@
-# Copy this file to .env and fill in your API keys
+# VibeClub AI Judge - Environment Configuration
+# =============================================
+# Copy this file to .env: cp ENV_TEMPLATE.txt .env
 
-# REQUIRED: Anthropic Claude API Key
-# Get your API key from: https://console.anthropic.com/
-ANTHROPIC_API_KEY=your_anthropic_api_key_here
+# ============================================
+# OPTION 1: OpenAI API (Recommended)
+# ============================================
+# For GPT-4 powered analysis with deep thinking
+# Get your key: https://platform.openai.com/api-keys
+OPENAI_API_KEY=sk-your-openai-key-here
 
-# OPTIONAL: Web Search API Key (for market research)
-# Choose one provider and get an API key:
-# - Brave Search: https://brave.com/search/api/
-# - Serper: https://serper.dev/
-# - Tavily: https://tavily.com/
-SEARCH_API_KEY=your_search_api_key_here
-SEARCH_API_PROVIDER=brave
+# ============================================
+# OPTION 2: Serper API (For real web search)
+# ============================================
+# For live Google search results
+# Get FREE key: https://serper.dev (2500 free searches)
+SERPER_API_KEY=your-serper-key-here
 
-# Server Configuration
+# ============================================
+# SERVER
+# ============================================
 PORT=3000
 
-# NOTE: If you don't provide a search API key, the system will work
-# with mock search data for demonstrations.
-
+# ============================================
+# WHAT EACH API DOES:
+# ============================================
+#
+# WITHOUT ANY API KEY:
+# - Uses smart local analysis
+# - Category-based competitor detection
+# - Basic scoring engine
+# - Still works, but less intelligent
+#
+# WITH OPENAI_API_KEY:
+# - GPT-4 deep thinking analysis
+# - Unique results every time
+# - Specific, personalized feedback
+# - References real competitors
+#
+# WITH SERPER_API_KEY:
+# - Real Google search results
+# - Finds actual competitors online
+# - Live market data
+# - Product Hunt / TechCrunch results
+#
+# WITH BOTH KEYS:
+# - Full power! Best results
+# - Real web search + GPT-4 analysis
+# - Most accurate competitor analysis
+# - Live market insights
+#
+# ============================================
+# QUICK START:
+# ============================================
+# 1. cp ENV_TEMPLATE.txt .env
+# 2. Edit .env with your key(s)
+# 3. npm start
+# 4. Open http://localhost:3000

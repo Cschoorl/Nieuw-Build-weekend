@@ -1,9 +1,9 @@
 // Character counters
 const charCounters = {
-    coreIdea: { input: null, counter: null, max: 150 },
-    targetAudience: { input: null, counter: null, max: 200 },
-    problemStatement: { input: null, counter: null, max: 300 },
-    competitiveAdvantage: { input: null, counter: null, max: 300 }
+    coreIdea: { max: 150 },
+    targetAudience: { max: 200 },
+    problemStatement: { max: 300 },
+    competitiveAdvantage: { max: 300 }
 };
 
 // Initialize app
@@ -19,18 +19,10 @@ function initializeCharCounters() {
         const counter = document.getElementById(`${key}Counter`);
         
         if (input && counter) {
-            charCounters[key].input = input;
-            charCounters[key].counter = counter;
-            
             input.addEventListener('input', () => {
                 const length = input.value.length;
                 counter.textContent = length;
-                
-                if (length >= charCounters[key].max * 0.9) {
-                    counter.style.color = '#E63B2E';
-                } else {
-                    counter.style.color = '#666';
-                }
+                counter.style.color = length >= charCounters[key].max * 0.9 ? '#E63B2E' : '#666';
             });
         }
     });
@@ -42,12 +34,9 @@ function setupFormSubmission() {
     
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
         const formData = collectFormData();
         
-        if (!validateFormData(formData)) {
-            return;
-        }
+        if (!validateFormData(formData)) return;
         
         showLoading();
         
@@ -57,7 +46,7 @@ function setupFormSubmission() {
         } catch (error) {
             console.error('Error:', error);
             hideLoading();
-            showError(error.message);
+            alert(error.message || 'Something went wrong');
         }
     });
 }
@@ -81,55 +70,26 @@ function collectFormData() {
 // Validate form data
 function validateFormData(data) {
     const required = ['projectTitle', 'coreIdea', 'targetAudience', 'problemStatement', 'businessModel', 'competitiveAdvantage'];
-    
     for (const field of required) {
         if (!data[field]) {
-            showError(`Missing required field: ${field}`);
+            alert(`Please fill in: ${field}`);
             return false;
         }
     }
-    
-    if (data.githubLink && !isValidUrl(data.githubLink)) {
-        showError('Invalid GitHub URL');
-        return false;
-    }
-    
-    if (data.demoVideoLink && !isValidUrl(data.demoVideoLink)) {
-        showError('Invalid Demo Video URL');
-        return false;
-    }
-    
     return true;
-}
-
-// Check if URL is valid
-function isValidUrl(string) {
-    try {
-        new URL(string);
-        return true;
-    } catch (_) {
-        return false;
-    }
-}
-
-// Show error message
-function showError(message) {
-    alert(message);
 }
 
 // Submit to AI backend
 async function submitToAI(formData) {
     const response = await fetch('http://localhost:3000/api/evaluate', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
     });
     
     if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || 'Failed to get evaluation');
+        throw new Error(error.message || 'Evaluation failed');
     }
     
     return await response.json();
@@ -168,7 +128,7 @@ function animateLoadingSteps() {
         } else {
             clearInterval(interval);
         }
-    }, 400);
+    }, 800);
 }
 
 // Display results
@@ -179,45 +139,67 @@ function displayResults(data) {
     container.innerHTML = generateResultsHTML(data);
     container.classList.remove('hidden');
     
-    // Animate score bars after a short delay
-    setTimeout(() => {
-        animateScoreBars();
-    }, 100);
-    
+    setTimeout(() => animateScoreBars(), 100);
     container.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// Animate score progress bars
+// Animate score bars
 function animateScoreBars() {
-    const bars = document.querySelectorAll('.score-bar-fill');
-    bars.forEach(bar => {
-        const width = bar.getAttribute('data-width');
-        bar.style.width = width + '%';
+    document.querySelectorAll('.score-bar-fill').forEach(bar => {
+        bar.style.width = bar.getAttribute('data-width') + '%';
     });
 }
 
-// Get score level for styling
+// Get score level
 function getScoreLevel(score) {
     if (score >= 75) return 'high';
     if (score >= 55) return 'medium';
     return 'low';
 }
 
-// Generate results HTML - Improved Layout
+// Generate results HTML
 function generateResultsHTML(data) {
     const innovationLevel = getScoreLevel(data.innovationScore.score);
     const marketLevel = getScoreLevel(data.marketPotentialScore.score);
     const overallLevel = getScoreLevel(data.overallRating.score);
     
     return `
-        <!-- Hero Verdict -->
+        <!-- Hero -->
         <div class="result-hero">
-            <div class="result-hero-label">AI VERDICT FOR</div>
+            <div class="result-hero-label">AI JUDGE VERDICT</div>
             <h1 class="result-hero-title">${escapeHtml(data.projectTitle)}</h1>
             <div class="result-hero-verdict ${overallLevel}">${data.overallRating.verdict}</div>
         </div>
 
-        <!-- Score Cards Grid -->
+        <!-- AI Thinking Section (if available) -->
+        ${data.thinking ? `
+        <div class="thinking-section">
+            <div class="section-header">
+                <span class="section-icon">🧠</span>
+                <h2>AI THINKING PROCESS</h2>
+            </div>
+            <div class="thinking-grid">
+                <div class="thinking-card">
+                    <div class="thinking-label">UNDERSTANDING</div>
+                    <div class="thinking-text">${escapeHtml(data.thinking.whatThisIs)}</div>
+                </div>
+                <div class="thinking-card">
+                    <div class="thinking-label">IS THE PROBLEM REAL?</div>
+                    <div class="thinking-text">${escapeHtml(data.thinking.isTheProblemReal)}</div>
+                </div>
+                <div class="thinking-card">
+                    <div class="thinking-label">VS COMPETITORS</div>
+                    <div class="thinking-text">${escapeHtml(data.thinking.competitorComparison)}</div>
+                </div>
+                <div class="thinking-card">
+                    <div class="thinking-label">MARKET TIMING</div>
+                    <div class="thinking-text">${escapeHtml(data.thinking.marketTiming)}</div>
+                </div>
+            </div>
+        </div>
+        ` : ''}
+
+        <!-- Score Grid -->
         <div class="score-grid">
             <div class="score-card-new">
                 <div class="score-header">
@@ -261,14 +243,16 @@ function generateResultsHTML(data) {
             <div class="investor-label">INVESTOR INTEREST</div>
             <div class="investor-value">${data.overallRating.investorSignal}</div>
             <div class="investor-context">${escapeHtml(data.overallRating.competitiveContext)}</div>
+            ${data.overallRating.whyThisSignal ? `
+            <div class="investor-why">${escapeHtml(data.overallRating.whyThisSignal)}</div>
+            ` : ''}
         </div>
 
         <!-- Two Column Layout -->
         <div class="results-grid">
             <!-- Left Column -->
             <div class="results-column">
-                
-                <!-- Analysis Breakdown -->
+                <!-- Score Breakdown -->
                 <div class="result-section">
                     <div class="section-header">
                         <span class="section-icon">📊</span>
@@ -276,24 +260,22 @@ function generateResultsHTML(data) {
                     </div>
                     
                     <div class="analysis-card">
-                        <div class="analysis-title">
-                            <span>🔬</span> Innovation Analysis
-                        </div>
+                        <div class="analysis-title"><span>🔬</span> Innovation Analysis</div>
                         <div class="analysis-score">${data.innovationScore.score}/100</div>
                         <div class="analysis-text">${escapeHtml(data.innovationScore.reasoning)}</div>
                         <div class="analysis-improve">
-                            <strong>→ TO IMPROVE:</strong> ${escapeHtml(data.innovationScore.improvements)}
+                            <strong>→ TO IMPROVE:</strong>
+                            ${escapeHtml(data.innovationScore.improvements)}
                         </div>
                     </div>
 
                     <div class="analysis-card">
-                        <div class="analysis-title">
-                            <span>💰</span> Market Analysis
-                        </div>
+                        <div class="analysis-title"><span>💰</span> Market Analysis</div>
                         <div class="analysis-score">${data.marketPotentialScore.score}/100</div>
                         <div class="analysis-text">${escapeHtml(data.marketPotentialScore.reasoning)}</div>
                         <div class="analysis-improve">
-                            <strong>→ TO IMPROVE:</strong> ${escapeHtml(data.marketPotentialScore.improvements)}
+                            <strong>→ TO IMPROVE:</strong>
+                            ${escapeHtml(data.marketPotentialScore.improvements)}
                         </div>
                     </div>
                 </div>
@@ -316,11 +298,31 @@ function generateResultsHTML(data) {
                         `).join('')}
                     </div>
                 </div>
+
+                <!-- Concerns (if any) -->
+                ${data.concerns && data.concerns.length > 0 ? `
+                <div class="result-section">
+                    <div class="section-header">
+                        <span class="section-icon">⚠️</span>
+                        <h2>CONCERNS</h2>
+                    </div>
+                    <div class="concerns-list">
+                        ${data.concerns.map(c => `
+                            <div class="concern-row">
+                                <span class="concern-icon">!</span>
+                                <div class="concern-content">
+                                    <div class="concern-issue">${escapeHtml(c.issue)}</div>
+                                    <div class="concern-suggestion">→ ${escapeHtml(c.suggestion)}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : ''}
             </div>
 
             <!-- Right Column -->
             <div class="results-column">
-                
                 <!-- Project Summary -->
                 <div class="result-section">
                     <div class="section-header">
@@ -341,11 +343,11 @@ function generateResultsHTML(data) {
                             <div class="summary-value">${escapeHtml(data.summary.problemSolved)}</div>
                         </div>
                         <div class="summary-row">
-                            <div class="summary-label">REVENUE</div>
+                            <div class="summary-label">REVENUE MODEL</div>
                             <div class="summary-value">${escapeHtml(data.summary.businessModel)}</div>
                         </div>
                         <div class="summary-row">
-                            <div class="summary-label">EDGE</div>
+                            <div class="summary-label">COMPETITIVE EDGE</div>
                             <div class="summary-value">${escapeHtml(data.summary.competitiveEdge)}</div>
                         </div>
                     </div>
@@ -356,12 +358,18 @@ function generateResultsHTML(data) {
                 <div class="result-section">
                     <div class="section-header">
                         <span class="section-icon">🔍</span>
-                        <h2>MARKET INTEL</h2>
+                        <h2>MARKET RESEARCH</h2>
                     </div>
+                    
+                    ${data.webResearch.searchSource ? `
+                    <div class="research-source">
+                        Source: ${escapeHtml(data.webResearch.searchSource)}
+                    </div>
+                    ` : ''}
                     
                     ${data.webResearch.competitorsFound && data.webResearch.competitorsFound.length > 0 ? `
                     <div class="intel-row">
-                        <div class="intel-label">COMPETITORS</div>
+                        <div class="intel-label">COMPETITORS FOUND</div>
                         <div class="competitors-tags">
                             ${data.webResearch.competitorsFound.map(c => `
                                 <span class="competitor-chip">${escapeHtml(c)}</span>
@@ -372,15 +380,8 @@ function generateResultsHTML(data) {
                     
                     ${data.webResearch.marketGrowth ? `
                     <div class="intel-row">
-                        <div class="intel-label">MARKET TREND</div>
+                        <div class="intel-label">MARKET DATA</div>
                         <div class="intel-value">${escapeHtml(data.webResearch.marketGrowth)}</div>
-                    </div>
-                    ` : ''}
-                    
-                    ${data.webResearch.marketSizeValidation ? `
-                    <div class="intel-row">
-                        <div class="intel-label">MARKET SIZE</div>
-                        <div class="intel-value">${escapeHtml(data.webResearch.marketSizeValidation)}</div>
                     </div>
                     ` : ''}
                 </div>
@@ -388,7 +389,7 @@ function generateResultsHTML(data) {
             </div>
         </div>
 
-        <!-- Next Steps - Full Width -->
+        <!-- Next Steps -->
         <div class="result-section full-width">
             <div class="section-header">
                 <span class="section-icon">🚀</span>
@@ -417,7 +418,7 @@ function generateResultsHTML(data) {
     `;
 }
 
-// Escape HTML to prevent XSS
+// Escape HTML
 function escapeHtml(text) {
     if (!text) return '';
     const div = document.createElement('div');
